@@ -1,0 +1,16 @@
+services:
+  es:
+    build: .
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false   # 로컬 실습용. 운영에서는 반드시 켜기
+      - ES_JAVA_OPTS=-Xms1g -Xmx1g
+    ports: ["9200:9200"]
+    volumes: ["esdata:/usr/share/elasticsearch/data"]
+  kibana:                              # Dev Tools로 쿼리 실습용
+    image: docker.elastic.co/kibana/kibana:8.17.0
+    environment: ["ELASTICSEARCH_HOSTS=http://es:9200"]
+    ports: ["5601:5601"]
+    depends_on: [es]
+volumes:
+  esdata:
